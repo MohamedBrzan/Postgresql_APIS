@@ -55,6 +55,40 @@ export class UserController {
       res.status(status).json({ error: message });
     }
   }
+
+  async findById(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      const user = await this.userService.findById(id);
+      return res.status(200).json({ user });
+    } catch (error: any) {
+      const message = error.message || "Internal Server Error";
+      const status =
+        message === "INVALID_ID" || message === "USER_NOT_FOUND" ? 404 : 500;
+
+      return res.status(status).json({ error: message });
+    }
+  }
+
+  async update(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      const updates = req.body;
+
+      const updatedUser = await this.userService.update(id, updates);
+
+      return res
+        .status(200)
+        .json({ message: "User updated", user: updatedUser });
+    } catch (error: any) {
+      const message = error.message || "Internal Server Error";
+      const status =
+        message === "INVALID_ID" || message === "USER_NOT_FOUND" ? 404 : 500;
+
+      return res.status(status).json({ error: message });
+    }
+  }
+
   async getAllUsers(_req: Request, res: Response) {
     try {
       const users = await this.userService.getAllUsers();

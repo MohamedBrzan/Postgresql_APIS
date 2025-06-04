@@ -3,7 +3,7 @@ import { UserService } from "./../services/user.service";
 import { UserRepository } from "./../repositories/user.repository";
 import { Router, RequestHandler } from "express";
 
-const router = Router(); // ✅ Make sure this is Router(), not express()
+const router = Router();
 
 // Dependencies
 const userRepository = new UserRepository();
@@ -27,6 +27,16 @@ router.get(
 router.get(
   "/",
   userController.getAllUsers.bind(userController) as unknown as RequestHandler
+);
+
+router.get(
+  "/:id",
+  userController.findById.bind(userController) as unknown as RequestHandler
+);
+
+router.put(
+  "/:id",
+  userController.update.bind(userController) as unknown as RequestHandler
 );
 
 export default router;

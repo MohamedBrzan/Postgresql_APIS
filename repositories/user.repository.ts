@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async login(email: string): Promise<User | null> {
-    return this.findByEmail(email); 
+    return this.findByEmail(email);
   }
 
   /**
@@ -42,5 +42,29 @@ export class UserRepository implements IUserRepository {
     ]);
     if (res.rows.length === 0) return null;
     return User.fromDBObject(res.rows[0]);
+  }
+
+  async findById(id: string): Promise<User | null> {
+    const query = `SELECT * FROM users WHERE id = $1 LIMIT 1;`;
+    const result = await db.query(query, [id]);
+
+    if (result.rows.length === 0) return null;
+
+    return User.fromDBObject(result.rows[0]);
+  }
+
+  async update(id: string, user: Partial<User>): Promise<User | null> {
+    const query = `
+    UPDATE users
+    SET name = $1, email = $2, phone = $3, updated_at = NOW()
+    WHERE id = $4
+    RETURNING *;
+  `;
+    const values = [user.name, user.email, user.phone, id];
+
+    const result = await db.query(query, values);
+    if (result.rows.length === 0) return null;
+
+    return User.fromDBObject(result.rows[0]);
   }
 }

@@ -18,6 +18,20 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
 
   /**
+   * Retrieve a user by id.
+   * @param id User's unique id
+   * @returns User entity if found, or null
+   */
+  findById(id: string): Promise<User | null>;
+
+  /**
+   * Update a user by id.
+   * @param id User's unique id
+   * @returns User entity if found and updated, or null
+   */
+  update(id: string, user: Partial<User>): Promise<User | null>;
+
+  /**
    * Retrieve all users.
    * @returns Array of user entities
    */

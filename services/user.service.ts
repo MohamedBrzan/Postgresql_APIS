@@ -91,6 +91,42 @@ export class UserService {
     return user;
   }
 
+  async findById(id: string): Promise<User> {
+    if (!id || typeof id !== "string") {
+      throw new Error("INVALID_ID");
+    }
+
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new Error("USER_NOT_FOUND");
+    }
+
+    return user;
+  }
+
+  async update(id: string, updates: Partial<User>): Promise<User> {
+    if (!id || typeof id !== "string") {
+      throw new Error("INVALID_ID");
+    }
+
+    const existingUser = await this.userRepository.findById(id);
+    if (!existingUser) {
+      throw new Error("USER_NOT_FOUND");
+    }
+
+    const updatedUser = await this.userRepository.update(id, {
+      ...existingUser,
+      ...updates,
+    });
+
+    if (!updatedUser) {
+      throw new Error("UPDATE_FAILED");
+    }
+
+    return updatedUser;
+  }
+
   async getAllUsers(): Promise<User[]> {
     const users = await this.userRepository.findAll();
     return users;
