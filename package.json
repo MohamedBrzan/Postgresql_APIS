@@ -1,0 +1,44 @@
+{
+  "name": "postgresql-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.ts",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only main.ts",
+    "dev:debug": "nodemon --exec \"node --loader ts-node/esm --inspect-brk\" ./main.ts",
+    "start": "node dist/main.js",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts",
+    "migrate:create": "node-pg-migrate create",
+    "migrate:up": "node --loader ts-node/esm ./node_modules/node-pg-migrate/bin/node-pg-migrate up",
+    "migrate:down": "node-pg-migrate down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "argon2": "^0.43.0",
+    "config": "^4.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/argon2": "^0.15.4",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.15.29",
+    "@types/pg": "^8.15.4",
+    "node-pg-migrate": "^8.0.1",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3"
+  }
+}
