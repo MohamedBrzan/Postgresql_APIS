@@ -1,5 +1,3 @@
-// src/entities/user.entity.ts
-
 /**
  * Represents a User entity in the system.
  * Encapsulates user properties and behaviors.
@@ -10,8 +8,8 @@ export class User {
   public email: string;
   public password: string;
   public phone?: string | null;
-  public readonly createdAt?: Date;
-  public readonly updatedAt?: Date;
+  public readonly created_at?: Date;
+  public readonly updated_at?: Date;
 
   /**
    * Create a new User instance.
@@ -23,16 +21,16 @@ export class User {
     email: string;
     password: string;
     phone?: string | null;
-    createdAt?: Date;
-    updatedAt?: Date;
+    created_at?: Date;
+    updated_at?: Date;
   }) {
     this.id = params.id;
     this.name = params.name;
     this.email = params.email;
     this.password = params.password;
     this.phone = params.phone ?? null;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
+    this.created_at = params.created_at;
+    this.updated_at = params.updated_at;
   }
 
   /**
@@ -60,8 +58,8 @@ export class User {
       email: obj.email ?? "",
       password: obj.password,
       phone: obj.phone ?? null,
-      createdAt: obj.createdAt ? new Date(obj.createdAt) : undefined,
-      updatedAt: obj.updatedAt ? new Date(obj.updatedAt) : undefined,
+      created_at: obj.created_at ? new Date(obj.created_at) : undefined,
+      updated_at: obj.updated_at ? new Date(obj.updated_at) : undefined,
     });
   }
 }

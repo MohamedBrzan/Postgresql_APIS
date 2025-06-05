@@ -1,7 +1,7 @@
 import { UserController } from "./../controllers/user.controller";
 import { UserService } from "./../services/user.service";
 import { UserRepository } from "./../repositories/user.repository";
-import { Router, RequestHandler } from "express";
+import { Router } from "express";
 
 const router = Router();
 
@@ -11,32 +11,14 @@ const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
 // Routes
-router.post(
-  "/register",
-  userController.register.bind(userController) as unknown as RequestHandler
-);
-router.post(
-  "/login",
-  userController.login.bind(userController) as unknown as RequestHandler
-);
-router.get(
-  "/email/:email",
-  userController.findByEmail.bind(userController) as unknown as RequestHandler
-);
+router.post("/register", userController.register);
+router.post("/login", userController.login);
+router.get("/email/:email", userController.findByEmail);
 
-router.get(
-  "/",
-  userController.getAllUsers.bind(userController) as unknown as RequestHandler
-);
+router.get("/", userController.getAllUsers);
 
-router.get(
-  "/:id",
-  userController.findById.bind(userController) as unknown as RequestHandler
-);
+router.get("/:id", userController.findById);
 
-router.put(
-  "/:id",
-  userController.update.bind(userController) as unknown as RequestHandler
-);
+router.put("/:id", userController.update);
 
 export default router;

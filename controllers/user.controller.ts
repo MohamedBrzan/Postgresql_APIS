@@ -1,34 +1,33 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import { UserService } from "../services/user.service";
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  async register(req: Request, res: Response) {
+  register: RequestHandler = async (req, res) => {
     try {
       const newUser = await this.userService.register(req.body);
-      return res.status(201).json({ user: newUser });
+      res.status(201).json({ user: newUser });
     } catch (err: any) {
       if (err.message === "EMAIL_EXISTS") {
-        return res.status(409).json({ error: "Email already in use" });
+        res.status(409).json({ error: "Email already in use" });
       }
 
-      return res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  };
 
-  async login(req: Request, res: Response) {
+  login: RequestHandler = async (req, res) => {
     try {
       const { user, token } = await this.userService.login(
         req.body.email,
         req.body.password
       );
 
-      // Set token as HttpOnly cookie (secure: true for HTTPS)
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: 3600000, // 1 hour in ms
+        maxAge: 3600000, // 1 hour
         sameSite: "strict",
       });
 
@@ -39,14 +38,12 @@ export class UserController {
     } catch (err) {
       res.status(401).json({ error: "Invalid credentials: " + err });
     }
-  }
+  };
 
-  async findByEmail(req: Request, res: Response): Promise<void> {
+  findByEmail: RequestHandler = async (req, res) => {
     try {
       const { email } = req.params;
-
       const user = await this.userService.findByEmail(email);
-
       res.status(200).json({ user });
     } catch (error: any) {
       const message = error.message || "Internal server error";
@@ -54,47 +51,42 @@ export class UserController {
         message === "USER_NOT_FOUND" || message === "INVALID_EMAIL" ? 404 : 500;
       res.status(status).json({ error: message });
     }
-  }
+  };
 
-  async findById(req: Request, res: Response): Promise<Response> {
+  findById: RequestHandler = async (req, res) => {
     try {
       const { id } = req.params;
       const user = await this.userService.findById(id);
-      return res.status(200).json({ user });
+      res.status(200).json({ user });
     } catch (error: any) {
       const message = error.message || "Internal Server Error";
       const status =
         message === "INVALID_ID" || message === "USER_NOT_FOUND" ? 404 : 500;
-
-      return res.status(status).json({ error: message });
+      res.status(status).json({ error: message });
     }
-  }
+  };
 
-  async update(req: Request, res: Response): Promise<Response> {
+  update: RequestHandler = async (req, res) => {
     try {
       const { id } = req.params;
       const updates = req.body;
 
       const updatedUser = await this.userService.update(id, updates);
-
-      return res
-        .status(200)
-        .json({ message: "User updated", user: updatedUser });
+      res.status(200).json({ message: "User updated", user: updatedUser });
     } catch (error: any) {
       const message = error.message || "Internal Server Error";
       const status =
         message === "INVALID_ID" || message === "USER_NOT_FOUND" ? 404 : 500;
-
-      return res.status(status).json({ error: message });
+      res.status(status).json({ error: message });
     }
-  }
+  };
 
-  async getAllUsers(_req: Request, res: Response) {
+  getAllUsers: RequestHandler = async (_req, res) => {
     try {
       const users = await this.userService.getAllUsers();
       res.json(users);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
-  }
+  };
 }
