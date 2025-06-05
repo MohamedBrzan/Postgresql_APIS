@@ -7,11 +7,12 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       primaryKey: true,
       default: pgm.func("gen_random_uuid()"),
     },
-    name: { type: "varchar(255)", notNull: true },
+    name: { type: "varchar(255)", notNull: true, unique: true },
     description: { type: "text", notNull: false },
     price: { type: "numeric(10,2)", notNull: true },
     stock: { type: "integer", notNull: true, default: 0 },
     created_at: { type: "timestamp", default: pgm.func("now()") },
+    updated_at: { type: "timestamp" },
   });
 }
 

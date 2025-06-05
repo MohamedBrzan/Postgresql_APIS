@@ -21,4 +21,8 @@ router.get("/:id", userController.findById);
 
 router.put("/:id", userController.update);
 
+router.post("/reset-password", userController.resetPassword)
+
+router.post("/forgot-password", userController.fogotPassword)
+
 export default router;

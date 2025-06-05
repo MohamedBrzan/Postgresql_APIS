@@ -84,7 +84,29 @@ export class UserController {
   getAllUsers: RequestHandler = async (_req, res) => {
     try {
       const users = await this.userService.getAllUsers();
-      res.json(users);
+      res.status(200).json(users);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
+  fogotPassword: RequestHandler = async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await this.userService.forgotPassword(email);
+      res
+        .status(200)
+        .json({ message: "Password Forgot Working Successfully.", user });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
+  resetPassword: RequestHandler = async (req, res) => {
+    try {
+      const { email, newPassword } = req.body;
+      const user = await this.userService.resetPassword(email, newPassword);
+      res.status(200).json({ message: "Password Reseted Successfully.", user });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

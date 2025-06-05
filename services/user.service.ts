@@ -19,7 +19,6 @@ export class UserService {
   private async verifyPassword(hash: string, plain: string): Promise<boolean> {
     return await argon2.verify(hash, plain);
   }
-
   private generateToken(user: User): string {
     const secret = process.env.JWT_SECRET;
     if (!secret) {
@@ -130,5 +129,14 @@ export class UserService {
   async getAllUsers(): Promise<User[]> {
     const users = await this.userRepository.findAll();
     return users;
+  }
+
+  async forgotPassword(email: string): Promise<unknown> {
+    return await this.userRepository.forgotPassword(email);
+  }
+
+  async resetPassword(email: string, newPassword: string): Promise<unknown> {
+    const hashedPassword = await this.hashPassword(newPassword);
+    return await this.userRepository.resetPassword(email, hashedPassword);
   }
 }

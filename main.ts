@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmt from "helmet";
 import UsersRouters from "./routes/user.routes";
+import ProductsRouters from "./routes/product.routes";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(helmt());
 
 app.use("/api/v1/users", UsersRouters);
+app.use("/api/v1/products", ProductsRouters);
 
 export const pool = new Pool({
   user: process.env.PGUSER ?? "postgres",

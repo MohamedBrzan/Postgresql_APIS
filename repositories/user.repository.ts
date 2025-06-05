@@ -67,4 +67,23 @@ export class UserRepository implements IUserRepository {
 
     return User.fromDBObject(result.rows[0]);
   }
+
+  async forgotPassword(email: string): Promise<unknown> {
+    const query = `
+    SELECT * FROM users
+    WHERE email = $1
+    `;
+    return (await db.query(query, [email])).rows[0];
+  }
+
+  async resetPassword(email: string, newPassword: string): Promise<unknown> {
+    const query = `
+      UPDATE users
+      SET password = $1
+      WHERE email = $2
+      RETURNING *
+      `;
+    const values = [newPassword, email];
+    return (await db.query(query, values)).rows[0];
+  }
 }

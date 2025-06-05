@@ -1,5 +1,3 @@
-// src/interfaces/IUserRepository.ts
-
 import { User } from "../entities/User";
 
 export interface IUserRepository {
@@ -9,6 +7,15 @@ export interface IUserRepository {
    * @returns Created user entity (with generated ID, timestamps, etc)
    */
   register(user: User): Promise<User>;
+
+  /**
+   * Optional: A login method in the repository would typically fetch user by email.
+   * Password verification and token generation should be in the service layer.
+   *
+   * If you want to keep this method, define it as fetching user by email only.
+   * Otherwise, omit this from the interface.
+   */
+  login?(email: string): Promise<User | null>;
 
   /**
    * Retrieve a user by email.
@@ -38,11 +45,14 @@ export interface IUserRepository {
   findAll(): Promise<User[]>;
 
   /**
-   * Optional: A login method in the repository would typically fetch user by email.
-   * Password verification and token generation should be in the service layer.
-   *
-   * If you want to keep this method, define it as fetching user by email only.
-   * Otherwise, omit this from the interface.
+   * Send an Email to a User
+   * @returns success message after sent the email.
    */
-  login?(email: string): Promise<User | null>;
+  forgotPassword(email: string): Promise<unknown>;
+
+  /**
+   * Reset User Password
+   * @returns approve message after reset the password.
+   */
+  resetPassword(email: string, newPassword: string): Promise<unknown>;
 }
